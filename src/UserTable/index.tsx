@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
+import { Link, useParams } from "react-router-dom";
 
 type User = {
     id: number;
@@ -18,14 +19,38 @@ type UserResponse = {
 }
 
 
+function Pagination(props: {userResponse: UserResponse, currentPage: number}) {
+
+    let pages = [];
+    if (props.userResponse.total_pages > 1) {
+        for (let i = 0; i < props.userResponse.total_pages; i++) {           
+            pages.push(<li className="page-item" key={i}><Link className="page-link" to={`/users/${i+1}`}>{i+1}</Link></li>)
+        }
+    }
+
+    return (
+        <nav aria-label="Page navigation example">
+            <ul className="pagination">
+                <li className="page-item"><Link className="page-link" to={`/users/1`}>Previous</Link>Previous</li>
+                    {props.userResponse.total_pages > 1 && pages}
+                <li className="page-item"><Link className="page-link" to={`/users/${props.userResponse.total_pages}`}>Next</Link>Next</li>
+            </ul>
+        </nav>
+    )
+}
+
 function UserTable() {
 
+let params = useParams();
 const [users, setUsers] = useState<UserResponse>();
 
 useEffect(() => {
 
+    const baseUrl = 'https://reqres.in/api/users';
+    const pageparam = params?.pagenumber ? '?page=' + params.pagenumber : '';
+
     async function getUsers() {
-      const response = await fetch('https://reqres.in/api/users', {
+      const response = await fetch(baseUrl + pageparam, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -42,9 +67,18 @@ useEffect(() => {
       }    
     }
     getUsers();
-},[])
+},[params])
 
   return (
+    !users?.data ?
+    <div className="d-flex justify-content-center">
+    <div className="spinner-border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  :
+  <>
+<Pagination userResponse={users} currentPage={1} />
 <table className="table table-dark table-hover">
     <thead>
     <tr>
@@ -56,7 +90,6 @@ useEffect(() => {
     </thead>
           <tbody>
             {
-              users?.data &&
               users.data.map((user) => {
                 return (
                   <tr key={user.id}>
@@ -70,6 +103,7 @@ useEffect(() => {
             }
           </tbody>
         </table>
+        </>
   );
 }
 
