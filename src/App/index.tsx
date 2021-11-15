@@ -1,14 +1,17 @@
 import React from 'react';
-import UserTable from '../UserTable';
+import { Outlet } from 'react-router-dom';
 import './style.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <UserTable />
-      </header>
+    <>
+    <header className="App-header">
+      <h1>Users</h1>
+    </header>
+    <div className="container-md pt-4">
+      <Outlet />
     </div>
+    </>
   );
 }
 
