@@ -6,14 +6,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserTable from './UserTable';
+import UserDetail from './UserDetail';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} > 
+          <Route index element={<UserTable />} />
           <Route path="users" element={<UserTable />}>
             <Route path=":pagenumber" element={<UserTable />} />
+          </Route>
+          <Route path="user" element={<UserDetail />}>
+            <Route path=":userid" element={<UserDetail />} />
           </Route>
         </Route>
       </Routes>
