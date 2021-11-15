@@ -27,6 +27,7 @@ function UserTable() {
 
 let params = useParams();
 const [users, setUsers] = useState<UserResponse>();
+const [error, setError] = useState<string>();
 
 useEffect(() => {
 
@@ -34,57 +35,56 @@ useEffect(() => {
     const pageparam = params?.pagenumber ? '?page=' + params.pagenumber : '';
 
     async function getUsers() {
-      const response = await fetch(baseUrl + pageparam, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'}
-      })
-      
-      if (response.status >= 200 && response.status <= 299) {
-        const jsonResponse = await response.json();
-        const userResponse: UserResponse = jsonResponse;
-        setUsers(userResponse);
-      } else {
-        // Handle errors
-        console.log(response.status, response.statusText);
-      }    
+        try {
+            const response = await fetch(baseUrl + pageparam, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'}
+            });
+                
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                const userResponse: UserResponse = jsonResponse;
+                setUsers(userResponse);
+            } else {
+                setError(response.statusText)
+            }
+        }
+        catch(err) {
+            setError('Request error');
+        }    
     }
     getUsers();
 },[params])
 
   return (
-    !users?.data ?
-    <div className="d-flex justify-content-center">
-    <div className="spinner-border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
-  </div>
-  :
-  <>
-<table className="table table-hover">
-    <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Firstname</th>
-      <th scope="col">Lastname</th>
-      <th scope="col">Email</th>
-    </tr>
-    </thead>
-          <tbody>
-            {
-              users.data.map((user) => {
-                return (
-                  <tr key={user.id}>
-                    <td><Link className="link-pink" to={`/user/${user.id}`}>{user.id}</Link></td>
-                    <td>{user.first_name}</td>
-                    <td>{user.last_name}</td>
-                    <td>{user.email}</td>
-                  </tr>               
-                )
-              })
-            }
-          </tbody>
+
+    users?.data ?
+        <>
+        <table className="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Firstname</th>
+                    <th scope="col">Lastname</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {
+                    users.data.map((user) => {
+                        return (
+                        <tr key={user.id}>
+                            <td><Link className="link-pink" to={`/user/${user.id}`}>{user.id}</Link></td>
+                            <td>{user.first_name}</td>
+                            <td>{user.last_name}</td>
+                            <td>{user.email}</td>
+                        </tr>               
+                        )
+                    })
+                    }
+                </tbody>
         </table>
         {
             users.total_pages > 1 &&
@@ -93,6 +93,17 @@ useEffect(() => {
             </div>
         }
         </>
+    : error ?
+        <>
+        <div>{error}</div>
+        <Link className="card-link" to={`/users/`}>Back to list</Link>
+        </>
+    :
+    <div className="d-flex justify-content-center">
+        <div className="spinner-border" role="status">
+        <span className="visually-hidden">Loading...</span>
+        </div>
+    </div>
   );
 }
 
