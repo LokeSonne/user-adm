@@ -1,23 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 import { Link, useParams } from "react-router-dom";
-
-type User = {
-    id: number;
-    email: string;
-    first_name: string;
-    last_name: string;
-    avatar: string;
-}
-
-type UserResponse = {
-    page: number,
-    per_page: number,
-    total: number,
-    total_pages: number,
-    data: User[]
-}
-
+import { UserResponse } from '../Models/User';
 
 function Pagination(props: {userResponse: UserResponse, currentPage: number}) {
 
