@@ -31,9 +31,9 @@ function Pagination(props: {userResponse: UserResponse, currentPage: number}) {
     return (
         <nav aria-label="Page navigation example">
             <ul className="pagination">
-                <li className="page-item"><Link className="page-link" to={`/users/1`}>Previous</Link>Previous</li>
+                <li className="page-item"><Link className="page-link" to={`/users/1`}>Previous</Link></li>
                     {props.userResponse.total_pages > 1 && pages}
-                <li className="page-item"><Link className="page-link" to={`/users/${props.userResponse.total_pages}`}>Next</Link>Next</li>
+                <li className="page-item"><Link className="page-link" to={`/users/${props.userResponse.total_pages}`}>Next</Link></li>
             </ul>
         </nav>
     )
