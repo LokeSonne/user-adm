@@ -1,6 +1,33 @@
-# Getting Started with Create React App
+# User Admin
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Specification for app
+
+Created with Create-React-App with TypeScript.
+
+Bootstrap is used for UI component library. Chosen because it is extendable, customisable, and removable, since it mostly relies on CSS classes.
+
+React-Router is used for navigating. 
+
+Layout:
+A table view is a compact and easily sortable layout for displaying lots of data. This will be coupled with a card for showing details, including large image. The table will have pagination for large result sets.
+
+The page will display a loader while fetching data and a placeholder for the card.
+
+File structure:
+The app will have two main components: UserTable and UserDetail. They will have separate folders with stylesheets
+
+App
+	|_index.ts
+	|_style.css
+UserTable
+	|_index.ts
+	|_style.css
+UserDetail
+	|_index.ts
+	|_style.css
+
+State:
+State will be handled using the useState hook. It could be considered to switch to useReducer if the UI state or data increases in complexity
 
 ## Available Scripts
 
